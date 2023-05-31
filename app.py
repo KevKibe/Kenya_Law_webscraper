@@ -15,7 +15,7 @@ import os
 import sys
 
 #input file loader
-def load_file_to_documents(file_path):
+def load_file(file_path):
     documents = []
     
     if file_path.endswith(".pdf"):
@@ -30,15 +30,15 @@ def load_file_to_documents(file_path):
     return documents
 
  #splitting into chunks
- def get_text_chunks(text):
-     text_splitter = CharacterTextSplitter(
+def get_text_chunks(text):
+    text_splitter = CharacterTextSplitter(
         separator="\n",
         chunk_size=1000,
         chunk_overlap=200,
         length_function=len
     )
-     chunks = text_splitter.split_documents(text)
-     return chunks 
+    chunks = text_splitter.split_documents(text)
+    return chunks 
   
  #text embedding
 def get_vectorstore(text_chunks):
@@ -61,6 +61,19 @@ def get_conversation_chain(vectorstore):
     return conversation_chain
 
 def run_convo():
+    st.write('Get Information from Law Docs Using Natural Language')
+    st.title("Document Upload")
+    uploaded_file = st.file_uploader("Upload a document", type=["pdf", "docx", "doc", "txt"])
+    
+    if uploaded_file is not None:
+        documents = load_file(uploaded_file)
+        
+    chunks = get_text_chunks(documents)
+    vectordb= get_vectorstore(chunks)
+
+
+
+    
     pdf_qa = ConversationalRetrievalChain.from_llm(
         ChatOpenAI(openai_api_key= "",temperature=0.7, model_name='gpt-3.5-turbo'),
         retriever=vectordb.as_retriever(search_kwargs={'k': 6}),
@@ -69,7 +82,6 @@ def run_convo():
     )
 
     chat_history = []
-    st.write('Welcome to the DocBot. You are now ready to start interacting with your documents')
     query = st.text_input("Prompt: ")
     if query:
         result = pdf_qa({"question": query, "chat_history": chat_history})
