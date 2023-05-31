@@ -1,3 +1,4 @@
+import streamlit as st
 from PyPDF2 import PdfReader
 from langchain.document_loaders import PyPDFLoader
 from langchain.vectorstores import Chroma
@@ -12,3 +13,74 @@ from langchain.vectorstores import FAISS
 from docx2pdf import convert
 import os
 import sys
+
+#input file loader
+def load_file_to_documents(file_path):
+    documents = []
+    
+    if file_path.endswith(".pdf"):
+        loader = PyPDFLoader(file_path)
+        documents.extend(loader.load())
+    elif file_path.endswith('.docx') or file_path.endswith('.doc'):
+        loader = Docx2txtLoader(file_path)
+        documents.extend(loader.load())
+    elif file_path.endswith('.txt'):
+        loader = TextLoader(file_path)
+        documents.extend(loader.load())
+    return documents
+
+ #splitting into chunks
+ def get_text_chunks(text):
+    text_splitter = CharacterTextSplitter(
+        separator="\n",
+        chunk_size=1000,
+        chunk_overlap=200,
+        length_function=len
+    )
+    chunks = text_splitter.split_documents(text)
+    return chunks 
+  
+ #text embedding
+def get_vectorstore(text_chunks):
+    vectordb = Chroma.from_documents(text_chunks, embedding=OpenAIEmbeddings(openai_api_key= "")
+                                     )
+    return vectordb
+vectordb= get_vectorstore(chunks)
+
+#conversationchain
+def get_conversation_chain(vectorstore):
+    llm = ChatOpenAI()
+
+    memory = ConversationBufferMemory(
+        memory_key='chat_history', return_messages=True)
+    conversation_chain = ConversationalRetrievalChain.from_llm(
+        llm=llm,
+        retriever=vectorstore.as_retriever(),
+        memory=memory
+    )
+    return conversation_chain
+
+def run_convo():
+    pdf_qa = ConversationalRetrievalChain.from_llm(
+        ChatOpenAI(openai_api_key= "",temperature=0.7, model_name='gpt-3.5-turbo'),
+        retriever=vectordb.as_retriever(search_kwargs={'k': 6}),
+        return_source_documents=True,
+        verbose=False
+    )
+
+    chat_history = []
+    st.write('Welcome to the DocBot. You are now ready to start interacting with your documents')
+    query = st.text_input("Prompt: ")
+    if query:
+        result = pdf_qa({"question": query, "chat_history": chat_history})
+        st.write("Answer: " + result["answer"])
+        chat_history.append((query, result["answer"]))
+
+run_convo()
+
+
+
+  
+  
+  
+  
