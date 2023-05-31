@@ -4,3 +4,4 @@ langchain
 docx2pdf
 streamlit
 chromadb
+openai
