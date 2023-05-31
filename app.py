@@ -31,14 +31,14 @@ def load_file_to_documents(file_path):
 
  #splitting into chunks
  def get_text_chunks(text):
-    text_splitter = CharacterTextSplitter(
+     text_splitter = CharacterTextSplitter(
         separator="\n",
         chunk_size=1000,
         chunk_overlap=200,
         length_function=len
     )
-    chunks = text_splitter.split_documents(text)
-    return chunks 
+     chunks = text_splitter.split_documents(text)
+     return chunks 
   
  #text embedding
 def get_vectorstore(text_chunks):
