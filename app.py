@@ -17,17 +17,21 @@ import sys
 #input file loader
 def load_file(file_path):
     documents = []
-    
-    if file_path.endswith(".pdf"):
-        loader = PyPDFLoader(file_path)
-        documents.extend(loader.load())
-    elif file_path.endswith('.docx') or file_path.endswith('.doc'):
-        loader = Docx2txtLoader(file_path)
-        documents.extend(loader.load())
-    elif file_path.endswith('.txt'):
-        loader = TextLoader(file_path)
-        documents.extend(loader.load())
+
+    if file_path is not None:
+        file_name = file_path.name
+        if file_name.endswith(".pdf"):
+            loader = PyPDFLoader(file_path)
+            documents.extend(loader.load())
+        elif file_name.endswith('.docx') or file_name.endswith('.doc'):
+            loader = Docx2txtLoader(file_path)
+            documents.extend(loader.load())
+        elif file_name.endswith('.txt'):
+            loader = TextLoader(file_path)
+            documents.extend(loader.load())
+
     return documents
+
 
  #splitting into chunks
 def get_text_chunks(text):
