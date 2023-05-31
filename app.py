@@ -64,8 +64,8 @@ def run_convo():
     st.title("Document Upload")
     uploaded_file = st.file_uploader("Upload a document", type=["pdf", "docx", "doc", "txt"])
     
-    if uploaded_file is not None:
-        docs = load_file(uploaded_file)
+   # if uploaded_file is not None:
+    docs = load_file(uploaded_file)
         
     chunks = get_text_chunks(docs)
     vectordb= get_vectorstore(chunks)
