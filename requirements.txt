@@ -5,3 +5,4 @@ docx2pdf
 streamlit
 chromadb
 openai
+tiktoken
