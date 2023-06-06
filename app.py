@@ -78,7 +78,7 @@ def run_convo():
 
     
     pdf_qa = ConversationalRetrievalChain.from_llm(
-        ChatOpenAI(openai_api_key= "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",temperature=0.7, model_name='gpt-3.5-turbo'),
+        ChatOpenAI(openai_api_key= "",temperature=0.7, model_name='gpt-3.5-turbo'),
         retriever=vectordb.as_retriever(search_kwargs={'k': 6}),
         return_source_documents=True,
         verbose=False
