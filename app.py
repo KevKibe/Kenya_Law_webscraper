@@ -48,10 +48,9 @@ def get_text_chunks(text):
  #text embedding
 def get_vectorstore(text_chunks):
     vectordb = Chroma.from_documents(text_chunks, embedding=OpenAIEmbeddings(openai_api_key= openai_api_key))
-    return vectordb
-vectordb= get_vectorstore(chunks)
     
     return vectordb
+
 
 #conversationchain
 def get_conversation_chain(vectorstore):
