@@ -13,6 +13,7 @@ from langchain.vectorstores import FAISS
 from docx2pdf import convert
 import os
 import sys
+st.secrets.load()
 openai_api_key = st.secrets["openai"]["api_key"]
 
 #input file loader
