@@ -15,7 +15,7 @@ import os
 import openai
 import sys
 
-openai.api_key = st.secrets["openai"]["api_key"]
+openai_api_key = st.secrets["openai"]["api_key"]
 
 #input file loader
 def load_file(file_path):
@@ -49,7 +49,7 @@ def get_text_chunks(text):
   
  #text embedding
 def get_vectorstore(text_chunks):
-    vectordb = Chroma.from_documents(text_chunks, embedding=OpenAIEmbeddings()
+    vectordb = Chroma.from_documents(text_chunks, embedding=OpenAIEmbeddings(openai_api_key=openai_api_key)
                                      )
     return vectordb
 
@@ -81,7 +81,7 @@ def run_convo():
 
     
     pdf_qa = ConversationalRetrievalChain.from_llm(
-        ChatOpenAI(temperature=0.7, model_name='gpt-3.5-turbo'),
+        ChatOpenAI(openai_api_key=openai_api_key,temperature=0.7, model_name='gpt-3.5-turbo'),
         retriever=vectordb.as_retriever(search_kwargs={'k': 6}),
         return_source_documents=True,
         verbose=False
