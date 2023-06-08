@@ -12,6 +12,7 @@ from langchain.text_splitter import CharacterTextSplitter
 from langchain.vectorstores import FAISS 
 from docx2pdf import convert
 import os
+import openai
 import sys
 
 openai.api_key = st.secrets["openai"]["api_key"]
