@@ -1,8 +1,1 @@
-pandas
-PyPDF2
-langchain
-docx2pdf
-streamlit
-chromadb
-openai
-tiktoken
+selenium
