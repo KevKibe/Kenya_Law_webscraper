@@ -1,0 +1,8 @@
+venv
+cache
+.env
+casefile_names.txt
+train_data_gen.py
+test.py
+.gitignore
+scraping_and_Indexing/google-chrome-stable_current_amd64.deb

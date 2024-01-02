@@ -1,0 +1,11 @@
+selenium
+requests
+boto3
+python-dotenv
+langchain
+python-docx
+openai
+tiktoken
+faiss-cpu
+pinecone-client
+flask
